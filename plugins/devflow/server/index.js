@@ -45860,6 +45860,7 @@ var package_default = {
     "test:coverage": "vitest run --coverage",
     inspect: 'npm run build && npx -y @modelcontextprotocol/inspector@2.12.0 -e "GITHUB_TOKEN=${GITHUB_TOKEN:-$GH_TOKEN}" node dist/index.js',
     smoke: "tsx scripts/smoke.ts",
+    report: "npm run build && tsx scripts/report.ts",
     bundle: "npm run build && tsx scripts/bundle.ts",
     plugin: "npm run build && tsx scripts/sync-plugin.ts",
     "verify:plugin": "npm run plugin && git diff --exit-code -- plugins",
