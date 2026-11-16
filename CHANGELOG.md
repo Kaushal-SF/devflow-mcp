@@ -4,6 +4,14 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `npm run report -- owner/repo` runs a live test suite against a repository's recent PRs (every
+  tool, resource and prompt, plus bad inputs that must fail with typed errors), prints each check
+  in the terminal, and writes an HTML report with risk cards, observations and a call log.
+
 ## [1.1.0] - 2026-10-28
 
 Published as a Claude Code plugin. See Decisions.md D39–D40.

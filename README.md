@@ -443,7 +443,13 @@ npm run build          # one self-contained file: dist/index.js
 npm run bundle         # Claude Desktop installer: build/devflow.mcpb
 npm run inspect        # explore the server in the MCP Inspector
 npm run smoke -- owner/repo#123 [v1.0.0]   # live check of everything against real GitHub
+npm run report -- owner/repo               # live test suite with a pass/fail HTML report
 ```
+
+`npm run report` checks every tool, resource and prompt against a repository's recent PRs, plus
+bad inputs, then writes `reports/devflow-<owner>-<repo>-<time>.html` and opens it. Options:
+`--prs 1,2`, `--max-prs 5`, `--from <tag|date>`, `--out file.html`, `--no-open` (for CI; the
+command exits 1 if any check fails).
 
 | Document                           | Read it to learn                                                             |
 | ---------------------------------- | ---------------------------------------------------------------------------- |
