@@ -147,6 +147,17 @@ shell variable instead, pass it explicitly with `-e`. `npm run inspect` already 
 npx @modelcontextprotocol/inspector -e GITHUB_TOKEN=$GITHUB_TOKEN node <path>
 ```
 
+**5. Full test report (optional, from source)**: one command checks every tool, resource and
+prompt against a repository and opens the results as a web page:
+
+```bash
+npm run report -- modelcontextprotocol/typescript-sdk
+```
+
+The terminal shows each check as it runs (✓ or ✗). The page then shows a pass/fail summary, a risk
+card for each PR tested, observations such as risk signals no PR triggered, and a log of every call.
+See [For contributors](#for-contributors) for the options.
+
 ### Slash commands
 
 DevFlow ships three ready-made tasks. Each host shows them differently:
@@ -317,6 +328,15 @@ Claude Desktop doesn't see your shell's variables. Sign in with `gh auth login`,
 
 ### Using DevFlow
 
+**`[INVALID_INPUT]` "… is not a pull request reference"**
+
+The PR tools need one pull request, not a repository. Add the PR number:
+
+- `https://github.com/owner/repo/pull/123` (not `https://github.com/owner/repo`)
+- or `owner/repo#123`
+
+`generate_release_notes` is the one tool that takes a repository, as `owner/repo`.
+
 **`[NOT_FOUND]` for a PR or repository**
 
 - Check the link or the `owner/repo#123` reference.
@@ -444,12 +464,25 @@ npm run bundle         # Claude Desktop installer: build/devflow.mcpb
 npm run inspect        # explore the server in the MCP Inspector
 npm run smoke -- owner/repo#123 [v1.0.0]   # live check of everything against real GitHub
 npm run report -- owner/repo               # live test suite with a pass/fail HTML report
+npm run plugin         # restage the Claude Code plugin's server from the current build
 ```
 
 `npm run report` checks every tool, resource and prompt against a repository's recent PRs, plus
-bad inputs, then writes `reports/devflow-<owner>-<repo>-<time>.html` and opens it. Options:
-`--prs 1,2`, `--max-prs 5`, `--from <tag|date>`, `--out file.html`, `--no-open` (for CI; the
-command exits 1 if any check fails).
+bad inputs that must fail with the right error. It writes
+`reports/devflow-<owner>-<repo>-<time>.html` (git-ignored) and opens it. It accepts `owner/repo`
+or a repository URL.
+
+| Option              | Effect                                                                |
+| ------------------- | --------------------------------------------------------------------- |
+| `--prs 1,2`         | Test these PRs instead of the most recently updated ones              |
+| `--max-prs 5`       | How many recent PRs to pick (default 3)                               |
+| `--from <tag/date>` | Start of the release-notes range (default: day before the oldest PR)  |
+| `--out file.html`   | Write the report somewhere else                                       |
+| `--no-open`         | Don't open a browser (for CI; the command exits 1 if any check fails) |
+
+**Before you commit a change to `src/` or `package.json`**, run `npm run plugin` and commit
+`plugins/devflow/server/index.js` too. The plugin ships a bundled copy of the server, which also
+embeds `package.json`, and CI fails (`verify:plugin`) if that copy is out of date.
 
 | Document                           | Read it to learn                                                             |
 | ---------------------------------- | ---------------------------------------------------------------------------- |
